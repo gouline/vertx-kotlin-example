@@ -23,7 +23,7 @@ class MainVerticle : AbstractVerticle() {
 
         vertx.createHttpServer()
                 .requestHandler { router.accept(it) }
-                .listen(config().getInteger("http.port", 8080)) { result ->
+                .listen(Integer.getInteger("http.port", 8080)) { result ->
                     if (result.succeeded()) {
                         startFuture?.complete()
                     } else {
