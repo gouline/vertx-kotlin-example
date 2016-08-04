@@ -3,6 +3,8 @@ package net.gouline.vertxexample
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.Handler
+import io.vertx.core.http.HttpServerResponse
+import io.vertx.core.json.Json
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 
@@ -33,11 +35,27 @@ class MainVerticle : AbstractVerticle() {
     }
 
     private fun createRouter() = Router.router(vertx).apply {
-        get("/test").handler(handlerTest)
+        get("/").handler(handlerRoot)
+        get("/islands").handler(handlerIslands)
+        get("/countries").handler(handlerCountries)
     }
 
-    val handlerTest = Handler<RoutingContext> { req ->
-        req.response().end("Some boring text...")
+    val handlerRoot = Handler<RoutingContext> { req ->
+        req.response().end("Welcome!")
+    }
+
+    val handlerIslands = Handler<RoutingContext> { req ->
+        req.response().endWithJson(MOCK_ISLANDS)
+    }
+
+    val handlerCountries = Handler<RoutingContext> { req ->
+        val countries = MOCK_ISLANDS.map { it.country }.distinct().sortedBy { it.code }
+        req.response().endWithJson(countries)
+    }
+
+    fun HttpServerResponse.endWithJson(obj: Any) {
+        this.putHeader("Content-Type", "application/json; charset=utf-8")
+                .end(Json.encodePrettily(obj))
     }
 
 }
