@@ -2,7 +2,6 @@ package net.gouline.vertxexample
 
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
-import io.vertx.core.Vertx
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.RoutingContext
 
@@ -10,7 +9,6 @@ import io.vertx.ext.web.RoutingContext
 class MainVerticle : AbstractVerticle() {
 
     companion object {
-
         private val MOCK_ISLANDS by lazy {
             listOf(
                     Island("Kotlin", Country("Russia", "RU")),
@@ -19,17 +17,16 @@ class MainVerticle : AbstractVerticle() {
                     Island("Tasmania", Country("Australia", "AU"))
             )
         }
-
-        private fun createRouter(vertx: Vertx, verticle: MainVerticle) = Router.router(vertx).apply {
-            get("/").handler(verticle::handleRoot)
-            get("/islands").handler(verticle::handleListIslands)
-            get("/countries").handler(verticle::handleListCountries)
-        }
-
     }
 
     override fun start(startFuture: Future<Void>?) {
-        val router = createRouter(vertx, this)
+        val router = Router.router(vertx).apply {
+            val v = this@MainVerticle
+
+            get("/").handler(v::handleRoot)
+            get("/islands").handler(v::handleListIslands)
+            get("/countries").handler(v::handleListCountries)
+        }
 
         vertx.createHttpServer()
                 .requestHandler { router.accept(it) }
