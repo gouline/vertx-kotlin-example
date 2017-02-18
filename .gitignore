@@ -12,4 +12,6 @@ gradle-app.setting
 
 # IDE
 .idea/
-*.iml
+
+# Framework
+.vertx/
