@@ -7,29 +7,39 @@ import io.vertx.ext.web.Router
 @Suppress("unused")
 class MainVerticle : AbstractVerticle() {
 
-    companion object {
-        private val MOCK_ISLANDS by lazy {
-            listOf(
-                    Island("Kotlin", Country("Russia", "RU")),
-                    Island("Stewart Island", Country("New Zealand", "NZ")),
-                    Island("Cockatoo Island", Country("Australia", "AU")),
-                    Island("Tasmania", Country("Australia", "AU"))
-            )
-        }
-    }
+    private val dao = IslandsDao()
 
     private val router = Router.router(vertx).apply {
-        get("/").handler { context ->
-            context.response().end("Welcome!")
+        /**
+         * Welcome handler.
+         */
+        get("/").handler { ctx ->
+            ctx.response().end("Welcome!")
         }
 
-        get("/islands").handler { context ->
-            context.response().endWithJson(MOCK_ISLANDS)
+        /**
+         * Lists all islands.
+         */
+        get("/islands").handler { ctx ->
+            val islands = dao.fetchIslands()
+            ctx.response().endWithJson(islands)
         }
 
-        get("/countries").handler { context ->
-            val countries = MOCK_ISLANDS.map { it.country }.distinct().sortedBy { it.code }
-            context.response().endWithJson(countries)
+        /**
+         * Lists all countries.
+         */
+        get("/countries").handler { ctx ->
+            val countries = dao.fetchCountries()
+            ctx.response().endWithJson(countries)
+        }
+
+        /**
+         * Returns specific country.
+         */
+        get("/countries/:code").handler { ctx ->
+            val code = ctx.request().getParam("code")
+            val countries = dao.fetchCountries(code)
+            ctx.response().endWithJson(countries)
         }
     }
 
