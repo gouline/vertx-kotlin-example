@@ -12,6 +12,7 @@ buildscript {
         add project.ext.kotlinEapResolve
         jcenter()
     }
+    
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
