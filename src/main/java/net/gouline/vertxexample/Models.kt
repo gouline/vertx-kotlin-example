@@ -4,7 +4,7 @@ package net.gouline.vertxexample
  * Country model.
  *
  * @param name Full country name.
- * @param code Abbreviated country code.
+ * @param code ISO 3166 country code.
  */
 data class Country(val name: String, val code: String)
 
