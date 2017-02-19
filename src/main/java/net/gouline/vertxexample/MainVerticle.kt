@@ -4,8 +4,7 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.ext.web.Router
 
-@Suppress("unused")
-class MainVerticle : AbstractVerticle() {
+@VerticleClass class MainVerticle : AbstractVerticle() {
 
     private val dao = IslandsDao()
 
@@ -14,7 +13,7 @@ class MainVerticle : AbstractVerticle() {
          * Welcome handler.
          */
         get("/").handler { ctx ->
-            ctx.response().end("Welcome!")
+            ctx.response.end("Welcome!")
         }
 
         /**
@@ -22,7 +21,7 @@ class MainVerticle : AbstractVerticle() {
          */
         get("/islands").handler { ctx ->
             val islands = dao.fetchIslands()
-            ctx.response().endWithJson(islands)
+            ctx.response.endWithJson(islands)
         }
 
         /**
@@ -30,16 +29,21 @@ class MainVerticle : AbstractVerticle() {
          */
         get("/countries").handler { ctx ->
             val countries = dao.fetchCountries()
-            ctx.response().endWithJson(countries)
+            ctx.response.endWithJson(countries)
         }
 
         /**
          * Returns specific country.
          */
         get("/countries/:code").handler { ctx ->
-            val code = ctx.request().getParam("code")
+            val code = ctx.request.getParam("code")
             val countries = dao.fetchCountries(code)
-            ctx.response().endWithJson(countries)
+
+            if (countries.isEmpty()) {
+                ctx.fail(404)
+            } else {
+                ctx.response.endWithJson(countries.first())
+            }
         }
     }
 
