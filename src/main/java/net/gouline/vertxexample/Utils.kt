@@ -1,6 +1,5 @@
 package net.gouline.vertxexample
 
-import io.vertx.core.MultiMap
 import io.vertx.core.http.HttpServerRequest
 import io.vertx.core.http.HttpServerResponse
 import io.vertx.core.json.Json

@@ -31,6 +31,5 @@ class IslandsDao {
                     .distinct()
                     .filter { code == null || it.code.equals(code, true) }
                     .sortedBy { it.code }
-
-
+    
 }

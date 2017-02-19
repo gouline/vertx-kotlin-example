@@ -47,16 +47,16 @@ import io.vertx.ext.web.Router
         }
     }
 
-    override fun start(startFuture: Future<Void>?) {
-        vertx.createHttpServer()
-                .requestHandler { router.accept(it) }
-                .listen(Integer.getInteger("http.port", 8080)) { result ->
-                    if (result.succeeded()) {
-                        startFuture?.complete()
-                    } else {
-                        startFuture?.fail(result.cause())
-                    }
+override fun start(startFuture: Future<Void>?) {
+    vertx.createHttpServer()
+            .requestHandler { router.accept(it) }
+            .listen(Integer.getInteger("http.port", 8080)) { result ->
+                if (result.succeeded()) {
+                    startFuture?.complete()
+                } else {
+                    startFuture?.fail(result.cause())
                 }
-    }
+            }
+}
 
 }
