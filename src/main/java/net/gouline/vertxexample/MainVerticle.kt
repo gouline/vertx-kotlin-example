@@ -3,6 +3,7 @@ package net.gouline.vertxexample
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.ext.web.Router
+import io.vertx.kotlin.core.http.HttpServerOptions
 
 @VerticleClass class MainVerticle : AbstractVerticle() {
 
@@ -47,16 +48,19 @@ import io.vertx.ext.web.Router
         }
     }
 
-override fun start(startFuture: Future<Void>?) {
-    vertx.createHttpServer()
-            .requestHandler { router.accept(it) }
-            .listen(Integer.getInteger("http.port", 8080)) { result ->
-                if (result.succeeded()) {
-                    startFuture?.complete()
-                } else {
-                    startFuture?.fail(result.cause())
+    override fun start(startFuture: Future<Void>?) {
+        vertx.createHttpServer(
+                HttpServerOptions(
+                        port = Integer.getInteger("http.port", 8080)
+                ))
+                .requestHandler { router.accept(it) }
+                .listen { result ->
+                    if (result.succeeded()) {
+                        startFuture?.complete()
+                    } else {
+                        startFuture?.fail(result.cause())
+                    }
                 }
-            }
-}
+    }
 
 }

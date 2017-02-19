@@ -1,18 +1,17 @@
 buildscript {
     ext {
         kotlin_version = '1.1.0-rc-91'
-        vertx_version = '3.3.3'
+        vertx_version = '3.4.0.Beta1'
 
-        kotlinEapResolve = repositories.maven {
-            url 'http://dl.bintray.com/kotlin/kotlin-eap-1.1'
-        }
+        // Kotlin 1.1 EAP
+        kotlinEapUrl = 'http://dl.bintray.com/kotlin/kotlin-eap-1.1'
     }
 
     repositories {
-        add project.ext.kotlinEapResolve
+        maven { url kotlinEapUrl }
         jcenter()
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -26,18 +25,22 @@ plugins {
 
 apply plugin: 'kotlin'
 
-sourceCompatibility = '1.8'
+allprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
 
 mainClassName = 'io.vertx.core.Launcher'
 def mainVerticleName = 'net.gouline.vertxexample.MainVerticle'
 
 repositories {
-    add project.ext.kotlinEapResolve
+    maven { url kotlinEapUrl }
     jcenter()
 }
 
 dependencies {
     compile "io.vertx:vertx-core:$vertx_version"
+    compile "io.vertx:vertx-lang-kotlin:$vertx_version"
     compile "io.vertx:vertx-web:$vertx_version"
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
