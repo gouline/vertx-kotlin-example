@@ -1,14 +1,10 @@
 buildscript {
     ext {
-        kotlin_version = '1.1.0-rc-91'
+        kotlin_version = '1.1.0'
         vertx_version = '3.4.0.Beta1'
-
-        // Kotlin 1.1 EAP
-        kotlinEapUrl = 'http://dl.bintray.com/kotlin/kotlin-eap-1.1'
     }
 
     repositories {
-        maven { url kotlinEapUrl }
         jcenter()
     }
 
@@ -25,16 +21,13 @@ plugins {
 
 apply plugin: 'kotlin'
 
-allprojects {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 mainClassName = 'io.vertx.core.Launcher'
 def mainVerticleName = 'net.gouline.vertxexample.MainVerticle'
 
 repositories {
-    maven { url kotlinEapUrl }
     jcenter()
 }
 
